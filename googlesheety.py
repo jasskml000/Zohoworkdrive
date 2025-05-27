@@ -9,7 +9,6 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
-from logging import Logger
 
 
 # Load environment variables
@@ -55,11 +54,11 @@ def get_google_sheets_service():
         if os.path.exists(TOKEN_PATH):
             creds = Credentials.from_authorized_user_file(TOKEN_PATH, SCOPES)
         if not creds or not creds.valid:
-            logger.error("Invalid or missing Google token at %s. Please update google_token.json secret.", TOKEN_PATH)
+            print("Invalid or missing Google token at %s. Please update google_token.json secret.", TOKEN_PATH)
             raise ValueError("Invalid or missing Google token")
         return build('sheets', 'v4', credentials=creds)
     except Exception as e:
-        logger.error(f"Failed to initialize Google Sheets service: {e}")
+        print(f"Failed to initialize Google Sheets service: {e}")
         raise
 
 def refresh_access_token():
