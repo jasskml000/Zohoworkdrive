@@ -4,6 +4,7 @@ import re
 import time
 import os
 from dotenv import load_dotenv
+import base64
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
@@ -47,6 +48,11 @@ SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 CREDENTIALS_FILE = 'credentials.json'
 
 def get_google_sheets_service():
+    # Decode credentials.json from environment variable if available
+    base64_creds = os.getenv("GOOGLE_CREDS_BASE64")
+    if base64_creds:
+        with open(CREDENTIALS_FILE, "wb") as f:
+            f.write(base64.b64decode(base64_creds))
     creds = None
     try:
         creds = Credentials.from_authorized_user_file('token.json', SCOPES)
