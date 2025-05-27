@@ -47,21 +47,18 @@ SHEET_NAME = "Sheet1"
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 CREDENTIALS_FILE = 'credentials.json'
 
-def get_google_sheets_service():
-    # Decode credentials.json from environment variable if available
-    base64_creds = os.getenv("GOOGLE_CREDS_BASE64")
-    if base64_creds:
-        with open(CREDENTIALS_FILE, "wb") as f:
-            f.write(base64.b64decode(base64_creds))
-    creds = None
+ef get_google_sheets_service():
     try:
-        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
-    except FileNotFoundError:
-        flow = InstalledAppFlow.from_client_secrets_file(CREDENTIALS_FILE, SCOPES)
-        creds = flow.run_console()
-        with open('token.json', 'w') as token:
-            token.write(creds.to_json())
-    return build('sheets', 'v4', credentials=creds)
+        creds = None
+        if os.path.exists(TOKEN_PATH):
+            creds = Credentials.from_authorized_user_file(TOKEN_PATH, SCOPES)
+        if not creds or not creds.valid:
+            logger.error("Invalid or missing Google token at %s. Please update google_token.json secret.", TOKEN_PATH)
+            raise ValueError("Invalid or missing Google token")
+        return build('sheets', 'v4', credentials=creds)
+    except Exception as e:
+        logger.error(f"Failed to initialize Google Sheets service: {e}")
+        raise
 
 def refresh_access_token():
     global zoho_auth_token, zoho_headers
