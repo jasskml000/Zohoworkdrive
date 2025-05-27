@@ -47,7 +47,7 @@ SHEET_NAME = "Sheet1"
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 CREDENTIALS_FILE = 'credentials.json'
 
-ef get_google_sheets_service():
+def get_google_sheets_service():
     try:
         creds = None
         if os.path.exists(TOKEN_PATH):
