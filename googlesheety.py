@@ -47,6 +47,7 @@ SPREADSHEET_ID = os.getenv("GOOGLE_SPREADSHEET_ID")
 SHEET_NAME = "Sheet1"
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 CREDENTIALS_FILE = 'credentials.json'
+TOKEN_PATH='etc/secrets/token.json'
 
 def get_google_sheets_service():
     try:
